@@ -25,7 +25,7 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class RSKImageScrollView;
 @protocol RSKImageCropViewControllerDataSource;
 @protocol RSKImageCropViewControllerDelegate;
 
@@ -275,6 +275,11 @@ typedef NS_ENUM(NSUInteger, RSKImageCropMode) {
  The horizontal space between the trailing of the crop view and the trailing of the 'Choose' button in landscape orientation. Default value is `13.0f`.
  */
 @property (assign, nonatomic) CGFloat landscapeCropViewTrailingAndChooseButtonTrailingHorizontalSpace;
+
+@property (strong, nonatomic) RSKImageScrollView *imageScrollView;
+
+- (void)updateMaskRect;
+- (void)updateMaskPath;
 
 @end
 

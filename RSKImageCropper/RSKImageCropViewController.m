@@ -47,7 +47,6 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
 @property (copy, nonatomic) UIColor *originalNavigationControllerViewBackgroundColor;
 @property (assign, nonatomic) BOOL originalStatusBarHidden;
 
-@property (strong, nonatomic) RSKImageScrollView *imageScrollView;
 @property (strong, nonatomic) RSKTouchView *overlayView;
 @property (strong, nonatomic) CAShapeLayer *maskLayer;
 
@@ -164,7 +163,7 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
     }
     
     self.originalNavigationControllerNavigationBarHidden = self.navigationController.navigationBarHidden;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
     
     self.originalNavigationControllerNavigationBarShadowImage = self.navigationController.navigationBar.shadowImage;
     self.navigationController.navigationBar.shadowImage = nil;
@@ -181,6 +180,8 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor yellowColor];
     
     UIApplication *application = [UIApplication rsk_sharedApplication];
     if (application) {
@@ -508,6 +509,7 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
         [self.maskLayer addAnimation:pathAnimation forKey:@"path"];
         
         self.maskLayer.path = [clipPath CGPath];
+        self.maskLayer.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3].CGColor;
     }
 }
 
@@ -761,8 +763,11 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
     
     CGAffineTransform transform = self.imageScrollView.transform;
     self.imageScrollView.transform = CGAffineTransformIdentity;
-    self.imageScrollView.frame = frame;
+    if (CGRectEqualToRect(self.imageScrollView.frame, CGRectZero)|| CGRectIsNull(self.imageScrollView.frame)) {
+        self.imageScrollView.frame = frame;
+    }
     self.imageScrollView.transform = transform;
+
 }
 
 - (void)layoutOverlayView
